@@ -1,0 +1,18 @@
+
+type AppConfig {
+  theme: String!
+}
+
+extend type Query {
+  appConfig: AppConfig
+}
+
+type Todo {
+  selected: Boolean!
+  touched: Boolean!
+}
+
+extend type TodoWhereUniqueInput {
+  selected: Boolean
+  touched: Boolean
+}

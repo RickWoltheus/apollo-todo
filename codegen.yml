@@ -1,0 +1,16 @@
+overwrite: true
+schema: 
+  - "src/infrastructure/uiSchema.graphql"
+  - "https://api-eu-west-2.graphcms.com/v2/cl4czje2m530c01z618vm3ozh/master"
+  
+documents: "src/data/**/*.graphql"
+generates:
+  src/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+      - "fragment-matcher"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

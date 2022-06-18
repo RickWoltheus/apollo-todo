@@ -1,0 +1,6 @@
+query AppConfiguration {
+  appConfig @client {
+    theme
+  }
+}
+

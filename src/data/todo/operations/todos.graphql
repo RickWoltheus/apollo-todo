@@ -1,0 +1,20 @@
+query Todos {
+  todos(where: { completed: false }) {
+    id
+    date
+    description
+    author
+    shortMessage
+    completed
+    selected @client
+    touched @client
+  }
+}
+
+mutation CompleteTodo {
+  updateTodo(data: {completed: true}, where: { touched: true }) {
+    id,
+    completed @client,
+    touched @client
+  }
+}
