@@ -3,7 +3,6 @@ import { AppBar, Box } from "@mui/material"
 import { client } from "./main"
 import { AppThemeProvider } from "./ui/core/components/Theme/ThemeProvider"
 import { ThemeToggleContainer } from "./ui/core/containers/ThemeToggleContainer/ThemeToggleContainer"
-import { TodoActions } from "./ui/todo/components/TodoActions"
 import TodoActionsContainer from "./ui/todo/containers/TodoActionsContainer"
 import TodoContainer from "./ui/todo/containers/TodosContainer"
 

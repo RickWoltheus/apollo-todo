@@ -18,3 +18,18 @@ mutation CompleteTodo {
     touched @client
   }
 }
+
+mutation UpdateTodo($id: ID!, $input: TodoUpdateInput!) {
+  updateTodo(
+    data: $input
+    where: { id: $id }
+  ) {
+    id
+    author
+    completed
+    createdAt
+    date
+    shortMessage
+    description
+  }
+}

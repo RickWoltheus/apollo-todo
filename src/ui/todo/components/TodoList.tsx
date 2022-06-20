@@ -22,16 +22,17 @@ interface Props {
     loading: boolean
     onTodoAdd: (id: string) => void
     onTodoRemove: (id: string) => void
+    onEdit: (id: string) => void
 }
 
-export const TodoList: React.FunctionComponent<Props> = ({items, loading, onTodoAdd, onTodoRemove}) => {
+export const TodoList: React.FunctionComponent<Props> = ({items, loading, onTodoAdd, onTodoRemove, onEdit}) => {
 
   if(loading) {
     return <CircularProgress />
   }
 
   return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+    <List sx={{ bgcolor: 'background.paper' }}>
       {items.map((value) => {
         const labelId = `checkbox-list-label-${value.id}`;
 
@@ -39,12 +40,12 @@ export const TodoList: React.FunctionComponent<Props> = ({items, loading, onTodo
           <ListItem
             key={value.id}
             disablePadding
-            onClick={() => value.selected ? onTodoRemove(value.id) : onTodoAdd(value.id)}
+            onClick={() => onEdit(value.id)}
           >
             <ListItemButton role={undefined}>
 
-              <Checkbox checked={value.selected} />
-              <ListItemText id={labelId} primary={value.shortMessage} />
+              <Checkbox checked={value.selected}  onClick={() => value.selected ? onTodoRemove(value.id) : onTodoAdd(value.id)} />
+              <ListItemText sx={{ color: 'text.primary' }} id={labelId} primary={value.shortMessage} />
             </ListItemButton>
           </ListItem>
         );

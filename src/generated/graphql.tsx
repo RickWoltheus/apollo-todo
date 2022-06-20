@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
@@ -2485,7 +2486,7 @@ export type Todo = Node & {
   createdAt: Scalars['DateTime'];
   /** User that created this document */
   createdBy?: Maybe<User>;
-  date?: Maybe<Scalars['Date']>;
+  date: Scalars['Date'];
   description?: Maybe<Scalars['String']>;
   /** Get the document in other stages */
   documentInStages: Array<Todo>;
@@ -2499,7 +2500,7 @@ export type Todo = Node & {
   publishedBy?: Maybe<User>;
   scheduledIn: Array<ScheduledOperation>;
   selected: Scalars['Boolean'];
-  shortMessage?: Maybe<Scalars['String']>;
+  shortMessage: Scalars['String'];
   /** System stage field */
   stage: Stage;
   touched: Scalars['Boolean'];
@@ -2570,9 +2571,9 @@ export type TodoCreateInput = {
   author?: InputMaybe<Scalars['String']>;
   completed?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  date?: InputMaybe<Scalars['Date']>;
+  date: Scalars['Date'];
   description?: InputMaybe<Scalars['String']>;
-  shortMessage?: InputMaybe<Scalars['String']>;
+  shortMessage: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -3490,12 +3491,20 @@ export type AppConfigurationQuery = { __typename?: 'Query', appConfig?: { __type
 export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', id: string, date?: any | null, description?: string | null, author?: string | null, shortMessage?: string | null, completed?: boolean | null, selected: boolean, touched: boolean }> };
+export type TodosQuery = { __typename?: 'Query', todos: Array<{ __typename?: 'Todo', id: string, date: any, description?: string | null, author?: string | null, shortMessage: string, completed?: boolean | null, selected: boolean, touched: boolean }> };
 
 export type CompleteTodoMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CompleteTodoMutation = { __typename?: 'Mutation', updateTodo?: { __typename?: 'Todo', id: string, completed?: boolean | null, touched: boolean } | null };
+
+export type UpdateTodoMutationVariables = Exact<{
+  id: Scalars['ID'];
+  input: TodoUpdateInput;
+}>;
+
+
+export type UpdateTodoMutation = { __typename?: 'Mutation', updateTodo?: { __typename?: 'Todo', id: string, author?: string | null, completed?: boolean | null, createdAt: any, date: any, shortMessage: string, description?: string | null } | null };
 
 
 export const AppConfigurationDocument = gql`
@@ -3607,6 +3616,46 @@ export function useCompleteTodoMutation(baseOptions?: Apollo.MutationHookOptions
 export type CompleteTodoMutationHookResult = ReturnType<typeof useCompleteTodoMutation>;
 export type CompleteTodoMutationResult = Apollo.MutationResult<CompleteTodoMutation>;
 export type CompleteTodoMutationOptions = Apollo.BaseMutationOptions<CompleteTodoMutation, CompleteTodoMutationVariables>;
+export const UpdateTodoDocument = gql`
+    mutation UpdateTodo($id: ID!, $input: TodoUpdateInput!) {
+  updateTodo(data: $input, where: {id: $id}) {
+    id
+    author
+    completed
+    createdAt
+    date
+    shortMessage
+    description
+  }
+}
+    `;
+export type UpdateTodoMutationFn = Apollo.MutationFunction<UpdateTodoMutation, UpdateTodoMutationVariables>;
+
+/**
+ * __useUpdateTodoMutation__
+ *
+ * To run a mutation, you first call `useUpdateTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTodoMutation, { data, loading, error }] = useUpdateTodoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTodoMutation, UpdateTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTodoMutation, UpdateTodoMutationVariables>(UpdateTodoDocument, options);
+      }
+export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
+export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
+export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
 
       export interface PossibleTypesResultData {
         possibleTypes: {
@@ -3630,3 +3679,1444 @@ export type CompleteTodoMutationOptions = Apollo.BaseMutationOptions<CompleteTod
 };
       export default result;
     
+
+type Properties<T> = Required<{
+  [K in keyof T]: z.ZodType<T[K], any, T[K]>;
+}>;
+
+type definedNonNullAny = {};
+
+export const isDefinedNonNullAny = (v: any): v is definedNonNullAny => v !== undefined && v !== null;
+
+export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny(v));
+
+export function AssetConnectInputSchema(): z.ZodObject<Properties<AssetConnectInput>> {
+  return z.object({
+    position: z.lazy(() => ConnectPositionInputSchema().nullish()),
+    where: z.lazy(() => AssetWhereUniqueInputSchema())
+  })
+}
+
+export function AssetCreateInputSchema(): z.ZodObject<Properties<AssetCreateInput>> {
+  return z.object({
+    createdAt: z.string().nullish(),
+    fileName: z.string(),
+    handle: z.string(),
+    height: z.number().nullish(),
+    localizations: z.lazy(() => AssetCreateLocalizationsInputSchema().nullish()),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    updatedAt: z.string().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetCreateLocalizationDataInputSchema(): z.ZodObject<Properties<AssetCreateLocalizationDataInput>> {
+  return z.object({
+    createdAt: z.string().nullish(),
+    fileName: z.string(),
+    handle: z.string(),
+    height: z.number().nullish(),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    updatedAt: z.string().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetCreateLocalizationInputSchema(): z.ZodObject<Properties<AssetCreateLocalizationInput>> {
+  return z.object({
+    data: z.lazy(() => AssetCreateLocalizationDataInputSchema()),
+    locale: LocaleSchema
+  })
+}
+
+export function AssetCreateLocalizationsInputSchema(): z.ZodObject<Properties<AssetCreateLocalizationsInput>> {
+  return z.object({
+    create: z.array(z.lazy(() => AssetCreateLocalizationInputSchema())).nullish()
+  })
+}
+
+export function AssetCreateManyInlineInputSchema(): z.ZodObject<Properties<AssetCreateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => AssetWhereUniqueInputSchema())).nullish(),
+    create: z.array(z.lazy(() => AssetCreateInputSchema())).nullish()
+  })
+}
+
+export function AssetCreateOneInlineInputSchema(): z.ZodObject<Properties<AssetCreateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => AssetWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => AssetCreateInputSchema().nullish())
+  })
+}
+
+export function AssetManyWhereInputSchema(): z.ZodObject<Properties<AssetManyWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    scheduledIn_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export const AssetOrderByInputSchema = z.nativeEnum(AssetOrderByInput);
+
+export function AssetTransformationInputSchema(): z.ZodObject<Properties<AssetTransformationInput>> {
+  return z.object({
+    document: z.lazy(() => DocumentTransformationInputSchema().nullish()),
+    image: z.lazy(() => ImageTransformationInputSchema().nullish()),
+    validateOptions: z.boolean().nullish()
+  })
+}
+
+export function AssetUpdateInputSchema(): z.ZodObject<Properties<AssetUpdateInput>> {
+  return z.object({
+    fileName: z.string().nullish(),
+    handle: z.string().nullish(),
+    height: z.number().nullish(),
+    localizations: z.lazy(() => AssetUpdateLocalizationsInputSchema().nullish()),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetUpdateLocalizationDataInputSchema(): z.ZodObject<Properties<AssetUpdateLocalizationDataInput>> {
+  return z.object({
+    fileName: z.string().nullish(),
+    handle: z.string().nullish(),
+    height: z.number().nullish(),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetUpdateLocalizationInputSchema(): z.ZodObject<Properties<AssetUpdateLocalizationInput>> {
+  return z.object({
+    data: z.lazy(() => AssetUpdateLocalizationDataInputSchema()),
+    locale: LocaleSchema
+  })
+}
+
+export function AssetUpdateLocalizationsInputSchema(): z.ZodObject<Properties<AssetUpdateLocalizationsInput>> {
+  return z.object({
+    create: z.array(z.lazy(() => AssetCreateLocalizationInputSchema())).nullish(),
+    delete: z.array(LocaleSchema).nullish(),
+    update: z.array(z.lazy(() => AssetUpdateLocalizationInputSchema())).nullish(),
+    upsert: z.array(z.lazy(() => AssetUpsertLocalizationInputSchema())).nullish()
+  })
+}
+
+export function AssetUpdateManyInlineInputSchema(): z.ZodObject<Properties<AssetUpdateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => AssetConnectInputSchema())).nullish(),
+    create: z.array(z.lazy(() => AssetCreateInputSchema())).nullish(),
+    delete: z.array(z.lazy(() => AssetWhereUniqueInputSchema())).nullish(),
+    disconnect: z.array(z.lazy(() => AssetWhereUniqueInputSchema())).nullish(),
+    set: z.array(z.lazy(() => AssetWhereUniqueInputSchema())).nullish(),
+    update: z.array(z.lazy(() => AssetUpdateWithNestedWhereUniqueInputSchema())).nullish(),
+    upsert: z.array(z.lazy(() => AssetUpsertWithNestedWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function AssetUpdateManyInputSchema(): z.ZodObject<Properties<AssetUpdateManyInput>> {
+  return z.object({
+    fileName: z.string().nullish(),
+    height: z.number().nullish(),
+    localizations: z.lazy(() => AssetUpdateManyLocalizationsInputSchema().nullish()),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetUpdateManyLocalizationDataInputSchema(): z.ZodObject<Properties<AssetUpdateManyLocalizationDataInput>> {
+  return z.object({
+    fileName: z.string().nullish(),
+    height: z.number().nullish(),
+    mimeType: z.string().nullish(),
+    size: z.number().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function AssetUpdateManyLocalizationInputSchema(): z.ZodObject<Properties<AssetUpdateManyLocalizationInput>> {
+  return z.object({
+    data: z.lazy(() => AssetUpdateManyLocalizationDataInputSchema()),
+    locale: LocaleSchema
+  })
+}
+
+export function AssetUpdateManyLocalizationsInputSchema(): z.ZodObject<Properties<AssetUpdateManyLocalizationsInput>> {
+  return z.object({
+    update: z.array(z.lazy(() => AssetUpdateManyLocalizationInputSchema())).nullish()
+  })
+}
+
+export function AssetUpdateManyWithNestedWhereInputSchema(): z.ZodObject<Properties<AssetUpdateManyWithNestedWhereInput>> {
+  return z.object({
+    data: z.lazy(() => AssetUpdateManyInputSchema()),
+    where: z.lazy(() => AssetWhereInputSchema())
+  })
+}
+
+export function AssetUpdateOneInlineInputSchema(): z.ZodObject<Properties<AssetUpdateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => AssetWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => AssetCreateInputSchema().nullish()),
+    delete: z.boolean().nullish(),
+    disconnect: z.boolean().nullish(),
+    update: z.lazy(() => AssetUpdateWithNestedWhereUniqueInputSchema().nullish()),
+    upsert: z.lazy(() => AssetUpsertWithNestedWhereUniqueInputSchema().nullish())
+  })
+}
+
+export function AssetUpdateWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<AssetUpdateWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => AssetUpdateInputSchema()),
+    where: z.lazy(() => AssetWhereUniqueInputSchema())
+  })
+}
+
+export function AssetUpsertInputSchema(): z.ZodObject<Properties<AssetUpsertInput>> {
+  return z.object({
+    create: z.lazy(() => AssetCreateInputSchema()),
+    update: z.lazy(() => AssetUpdateInputSchema())
+  })
+}
+
+export function AssetUpsertLocalizationInputSchema(): z.ZodObject<Properties<AssetUpsertLocalizationInput>> {
+  return z.object({
+    create: z.lazy(() => AssetCreateLocalizationDataInputSchema()),
+    locale: LocaleSchema,
+    update: z.lazy(() => AssetUpdateLocalizationDataInputSchema())
+  })
+}
+
+export function AssetUpsertWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<AssetUpsertWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => AssetUpsertInputSchema()),
+    where: z.lazy(() => AssetWhereUniqueInputSchema())
+  })
+}
+
+export function AssetWhereInputSchema(): z.ZodObject<Properties<AssetWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => AssetWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    fileName: z.string().nullish(),
+    fileName_contains: z.string().nullish(),
+    fileName_ends_with: z.string().nullish(),
+    fileName_in: z.array(z.string()).nullish(),
+    fileName_not: z.string().nullish(),
+    fileName_not_contains: z.string().nullish(),
+    fileName_not_ends_with: z.string().nullish(),
+    fileName_not_in: z.array(z.string()).nullish(),
+    fileName_not_starts_with: z.string().nullish(),
+    fileName_starts_with: z.string().nullish(),
+    handle: z.string().nullish(),
+    handle_contains: z.string().nullish(),
+    handle_ends_with: z.string().nullish(),
+    handle_in: z.array(z.string()).nullish(),
+    handle_not: z.string().nullish(),
+    handle_not_contains: z.string().nullish(),
+    handle_not_ends_with: z.string().nullish(),
+    handle_not_in: z.array(z.string()).nullish(),
+    handle_not_starts_with: z.string().nullish(),
+    handle_starts_with: z.string().nullish(),
+    height: z.number().nullish(),
+    height_gt: z.number().nullish(),
+    height_gte: z.number().nullish(),
+    height_in: z.array(z.number()).nullish(),
+    height_lt: z.number().nullish(),
+    height_lte: z.number().nullish(),
+    height_not: z.number().nullish(),
+    height_not_in: z.array(z.number()).nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    mimeType: z.string().nullish(),
+    mimeType_contains: z.string().nullish(),
+    mimeType_ends_with: z.string().nullish(),
+    mimeType_in: z.array(z.string()).nullish(),
+    mimeType_not: z.string().nullish(),
+    mimeType_not_contains: z.string().nullish(),
+    mimeType_not_ends_with: z.string().nullish(),
+    mimeType_not_in: z.array(z.string()).nullish(),
+    mimeType_not_starts_with: z.string().nullish(),
+    mimeType_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    scheduledIn_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    size: z.number().nullish(),
+    size_gt: z.number().nullish(),
+    size_gte: z.number().nullish(),
+    size_in: z.array(z.number()).nullish(),
+    size_lt: z.number().nullish(),
+    size_lte: z.number().nullish(),
+    size_not: z.number().nullish(),
+    size_not_in: z.array(z.number()).nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    width: z.number().nullish(),
+    width_gt: z.number().nullish(),
+    width_gte: z.number().nullish(),
+    width_in: z.array(z.number()).nullish(),
+    width_lt: z.number().nullish(),
+    width_lte: z.number().nullish(),
+    width_not: z.number().nullish(),
+    width_not_in: z.array(z.number()).nullish()
+  })
+}
+
+export function AssetWhereUniqueInputSchema(): z.ZodObject<Properties<AssetWhereUniqueInput>> {
+  return z.object({
+    id: z.string().nullish()
+  })
+}
+
+export function ColorInputSchema(): z.ZodObject<Properties<ColorInput>> {
+  return z.object({
+    hex: definedNonNullAnySchema.nullish(),
+    rgba: z.lazy(() => RgbaInputSchema().nullish())
+  })
+}
+
+export function ConnectPositionInputSchema(): z.ZodObject<Properties<ConnectPositionInput>> {
+  return z.object({
+    after: z.string().nullish(),
+    before: z.string().nullish(),
+    end: z.boolean().nullish(),
+    start: z.boolean().nullish()
+  })
+}
+
+export const DocumentFileTypesSchema = z.nativeEnum(DocumentFileTypes);
+
+export function DocumentOutputInputSchema(): z.ZodObject<Properties<DocumentOutputInput>> {
+  return z.object({
+    format: DocumentFileTypesSchema.nullish()
+  })
+}
+
+export function DocumentTransformationInputSchema(): z.ZodObject<Properties<DocumentTransformationInput>> {
+  return z.object({
+    output: z.lazy(() => DocumentOutputInputSchema().nullish())
+  })
+}
+
+export const ImageFitSchema = z.nativeEnum(ImageFit);
+
+export function ImageResizeInputSchema(): z.ZodObject<Properties<ImageResizeInput>> {
+  return z.object({
+    fit: ImageFitSchema.nullish(),
+    height: z.number().nullish(),
+    width: z.number().nullish()
+  })
+}
+
+export function ImageTransformationInputSchema(): z.ZodObject<Properties<ImageTransformationInput>> {
+  return z.object({
+    resize: z.lazy(() => ImageResizeInputSchema().nullish())
+  })
+}
+
+export const LocaleSchema = z.nativeEnum(Locale);
+
+export function LocationInputSchema(): z.ZodObject<Properties<LocationInput>> {
+  return z.object({
+    latitude: z.number(),
+    longitude: z.number()
+  })
+}
+
+export function PublishLocaleInputSchema(): z.ZodObject<Properties<PublishLocaleInput>> {
+  return z.object({
+    locale: LocaleSchema,
+    stages: z.array(StageSchema)
+  })
+}
+
+export function RgbaInputSchema(): z.ZodObject<Properties<RgbaInput>> {
+  return z.object({
+    a: definedNonNullAnySchema,
+    b: definedNonNullAnySchema,
+    g: definedNonNullAnySchema,
+    r: definedNonNullAnySchema
+  })
+}
+
+export function ScheduledOperationConnectInputSchema(): z.ZodObject<Properties<ScheduledOperationConnectInput>> {
+  return z.object({
+    position: z.lazy(() => ConnectPositionInputSchema().nullish()),
+    where: z.lazy(() => ScheduledOperationWhereUniqueInputSchema())
+  })
+}
+
+export function ScheduledOperationCreateManyInlineInputSchema(): z.ZodObject<Properties<ScheduledOperationCreateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => ScheduledOperationWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function ScheduledOperationCreateOneInlineInputSchema(): z.ZodObject<Properties<ScheduledOperationCreateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => ScheduledOperationWhereUniqueInputSchema().nullish())
+  })
+}
+
+export function ScheduledOperationManyWhereInputSchema(): z.ZodObject<Properties<ScheduledOperationManyWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    errorMessage_contains: z.string().nullish(),
+    errorMessage_ends_with: z.string().nullish(),
+    errorMessage_in: z.array(z.string()).nullish(),
+    errorMessage_not: z.string().nullish(),
+    errorMessage_not_contains: z.string().nullish(),
+    errorMessage_not_ends_with: z.string().nullish(),
+    errorMessage_not_in: z.array(z.string()).nullish(),
+    errorMessage_not_starts_with: z.string().nullish(),
+    errorMessage_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    release: z.lazy(() => ScheduledReleaseWhereInputSchema().nullish()),
+    status: ScheduledOperationStatusSchema.nullish(),
+    status_in: z.array(ScheduledOperationStatusSchema).nullish(),
+    status_not: ScheduledOperationStatusSchema.nullish(),
+    status_not_in: z.array(ScheduledOperationStatusSchema).nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export const ScheduledOperationOrderByInputSchema = z.nativeEnum(ScheduledOperationOrderByInput);
+
+export const ScheduledOperationStatusSchema = z.nativeEnum(ScheduledOperationStatus);
+
+export function ScheduledOperationUpdateManyInlineInputSchema(): z.ZodObject<Properties<ScheduledOperationUpdateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => ScheduledOperationConnectInputSchema())).nullish(),
+    disconnect: z.array(z.lazy(() => ScheduledOperationWhereUniqueInputSchema())).nullish(),
+    set: z.array(z.lazy(() => ScheduledOperationWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function ScheduledOperationUpdateOneInlineInputSchema(): z.ZodObject<Properties<ScheduledOperationUpdateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => ScheduledOperationWhereUniqueInputSchema().nullish()),
+    disconnect: z.boolean().nullish()
+  })
+}
+
+export function ScheduledOperationWhereInputSchema(): z.ZodObject<Properties<ScheduledOperationWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => ScheduledOperationWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    errorMessage_contains: z.string().nullish(),
+    errorMessage_ends_with: z.string().nullish(),
+    errorMessage_in: z.array(z.string()).nullish(),
+    errorMessage_not: z.string().nullish(),
+    errorMessage_not_contains: z.string().nullish(),
+    errorMessage_not_ends_with: z.string().nullish(),
+    errorMessage_not_in: z.array(z.string()).nullish(),
+    errorMessage_not_starts_with: z.string().nullish(),
+    errorMessage_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    release: z.lazy(() => ScheduledReleaseWhereInputSchema().nullish()),
+    status: ScheduledOperationStatusSchema.nullish(),
+    status_in: z.array(ScheduledOperationStatusSchema).nullish(),
+    status_not: ScheduledOperationStatusSchema.nullish(),
+    status_not_in: z.array(ScheduledOperationStatusSchema).nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export function ScheduledOperationWhereUniqueInputSchema(): z.ZodObject<Properties<ScheduledOperationWhereUniqueInput>> {
+  return z.object({
+    id: z.string().nullish()
+  })
+}
+
+export function ScheduledReleaseConnectInputSchema(): z.ZodObject<Properties<ScheduledReleaseConnectInput>> {
+  return z.object({
+    position: z.lazy(() => ConnectPositionInputSchema().nullish()),
+    where: z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())
+  })
+}
+
+export function ScheduledReleaseCreateInputSchema(): z.ZodObject<Properties<ScheduledReleaseCreateInput>> {
+  return z.object({
+    createdAt: z.string().nullish(),
+    description: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    releaseAt: z.string().nullish(),
+    title: z.string().nullish(),
+    updatedAt: z.string().nullish()
+  })
+}
+
+export function ScheduledReleaseCreateManyInlineInputSchema(): z.ZodObject<Properties<ScheduledReleaseCreateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())).nullish(),
+    create: z.array(z.lazy(() => ScheduledReleaseCreateInputSchema())).nullish()
+  })
+}
+
+export function ScheduledReleaseCreateOneInlineInputSchema(): z.ZodObject<Properties<ScheduledReleaseCreateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => ScheduledReleaseWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => ScheduledReleaseCreateInputSchema().nullish())
+  })
+}
+
+export function ScheduledReleaseManyWhereInputSchema(): z.ZodObject<Properties<ScheduledReleaseManyWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    errorMessage_contains: z.string().nullish(),
+    errorMessage_ends_with: z.string().nullish(),
+    errorMessage_in: z.array(z.string()).nullish(),
+    errorMessage_not: z.string().nullish(),
+    errorMessage_not_contains: z.string().nullish(),
+    errorMessage_not_ends_with: z.string().nullish(),
+    errorMessage_not_in: z.array(z.string()).nullish(),
+    errorMessage_not_starts_with: z.string().nullish(),
+    errorMessage_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    isActive_not: z.boolean().nullish(),
+    isImplicit: z.boolean().nullish(),
+    isImplicit_not: z.boolean().nullish(),
+    operations_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    operations_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    operations_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    releaseAt: z.string().nullish(),
+    releaseAt_gt: z.string().nullish(),
+    releaseAt_gte: z.string().nullish(),
+    releaseAt_in: z.array(z.string()).nullish(),
+    releaseAt_lt: z.string().nullish(),
+    releaseAt_lte: z.string().nullish(),
+    releaseAt_not: z.string().nullish(),
+    releaseAt_not_in: z.array(z.string()).nullish(),
+    status: ScheduledReleaseStatusSchema.nullish(),
+    status_in: z.array(ScheduledReleaseStatusSchema).nullish(),
+    status_not: ScheduledReleaseStatusSchema.nullish(),
+    status_not_in: z.array(ScheduledReleaseStatusSchema).nullish(),
+    title: z.string().nullish(),
+    title_contains: z.string().nullish(),
+    title_ends_with: z.string().nullish(),
+    title_in: z.array(z.string()).nullish(),
+    title_not: z.string().nullish(),
+    title_not_contains: z.string().nullish(),
+    title_not_ends_with: z.string().nullish(),
+    title_not_in: z.array(z.string()).nullish(),
+    title_not_starts_with: z.string().nullish(),
+    title_starts_with: z.string().nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export const ScheduledReleaseOrderByInputSchema = z.nativeEnum(ScheduledReleaseOrderByInput);
+
+export const ScheduledReleaseStatusSchema = z.nativeEnum(ScheduledReleaseStatus);
+
+export function ScheduledReleaseUpdateInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    releaseAt: z.string().nullish(),
+    title: z.string().nullish()
+  })
+}
+
+export function ScheduledReleaseUpdateManyInlineInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => ScheduledReleaseConnectInputSchema())).nullish(),
+    create: z.array(z.lazy(() => ScheduledReleaseCreateInputSchema())).nullish(),
+    delete: z.array(z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())).nullish(),
+    disconnect: z.array(z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())).nullish(),
+    set: z.array(z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())).nullish(),
+    update: z.array(z.lazy(() => ScheduledReleaseUpdateWithNestedWhereUniqueInputSchema())).nullish(),
+    upsert: z.array(z.lazy(() => ScheduledReleaseUpsertWithNestedWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function ScheduledReleaseUpdateManyInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateManyInput>> {
+  return z.object({
+    description: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    releaseAt: z.string().nullish(),
+    title: z.string().nullish()
+  })
+}
+
+export function ScheduledReleaseUpdateManyWithNestedWhereInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateManyWithNestedWhereInput>> {
+  return z.object({
+    data: z.lazy(() => ScheduledReleaseUpdateManyInputSchema()),
+    where: z.lazy(() => ScheduledReleaseWhereInputSchema())
+  })
+}
+
+export function ScheduledReleaseUpdateOneInlineInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => ScheduledReleaseWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => ScheduledReleaseCreateInputSchema().nullish()),
+    delete: z.boolean().nullish(),
+    disconnect: z.boolean().nullish(),
+    update: z.lazy(() => ScheduledReleaseUpdateWithNestedWhereUniqueInputSchema().nullish()),
+    upsert: z.lazy(() => ScheduledReleaseUpsertWithNestedWhereUniqueInputSchema().nullish())
+  })
+}
+
+export function ScheduledReleaseUpdateWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpdateWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => ScheduledReleaseUpdateInputSchema()),
+    where: z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())
+  })
+}
+
+export function ScheduledReleaseUpsertInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpsertInput>> {
+  return z.object({
+    create: z.lazy(() => ScheduledReleaseCreateInputSchema()),
+    update: z.lazy(() => ScheduledReleaseUpdateInputSchema())
+  })
+}
+
+export function ScheduledReleaseUpsertWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<ScheduledReleaseUpsertWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => ScheduledReleaseUpsertInputSchema()),
+    where: z.lazy(() => ScheduledReleaseWhereUniqueInputSchema())
+  })
+}
+
+export function ScheduledReleaseWhereInputSchema(): z.ZodObject<Properties<ScheduledReleaseWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => ScheduledReleaseWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    errorMessage: z.string().nullish(),
+    errorMessage_contains: z.string().nullish(),
+    errorMessage_ends_with: z.string().nullish(),
+    errorMessage_in: z.array(z.string()).nullish(),
+    errorMessage_not: z.string().nullish(),
+    errorMessage_not_contains: z.string().nullish(),
+    errorMessage_not_ends_with: z.string().nullish(),
+    errorMessage_not_in: z.array(z.string()).nullish(),
+    errorMessage_not_starts_with: z.string().nullish(),
+    errorMessage_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    isActive_not: z.boolean().nullish(),
+    isImplicit: z.boolean().nullish(),
+    isImplicit_not: z.boolean().nullish(),
+    operations_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    operations_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    operations_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    releaseAt: z.string().nullish(),
+    releaseAt_gt: z.string().nullish(),
+    releaseAt_gte: z.string().nullish(),
+    releaseAt_in: z.array(z.string()).nullish(),
+    releaseAt_lt: z.string().nullish(),
+    releaseAt_lte: z.string().nullish(),
+    releaseAt_not: z.string().nullish(),
+    releaseAt_not_in: z.array(z.string()).nullish(),
+    status: ScheduledReleaseStatusSchema.nullish(),
+    status_in: z.array(ScheduledReleaseStatusSchema).nullish(),
+    status_not: ScheduledReleaseStatusSchema.nullish(),
+    status_not_in: z.array(ScheduledReleaseStatusSchema).nullish(),
+    title: z.string().nullish(),
+    title_contains: z.string().nullish(),
+    title_ends_with: z.string().nullish(),
+    title_in: z.array(z.string()).nullish(),
+    title_not: z.string().nullish(),
+    title_not_contains: z.string().nullish(),
+    title_not_ends_with: z.string().nullish(),
+    title_not_in: z.array(z.string()).nullish(),
+    title_not_starts_with: z.string().nullish(),
+    title_starts_with: z.string().nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export function ScheduledReleaseWhereUniqueInputSchema(): z.ZodObject<Properties<ScheduledReleaseWhereUniqueInput>> {
+  return z.object({
+    id: z.string().nullish()
+  })
+}
+
+export const StageSchema = z.nativeEnum(Stage);
+
+export const SystemDateTimeFieldVariationSchema = z.nativeEnum(SystemDateTimeFieldVariation);
+
+export function TodoConnectInputSchema(): z.ZodObject<Properties<TodoConnectInput>> {
+  return z.object({
+    position: z.lazy(() => ConnectPositionInputSchema().nullish()),
+    where: z.lazy(() => TodoWhereUniqueInputSchema())
+  })
+}
+
+export function TodoCreateInputSchema(): z.ZodObject<Properties<TodoCreateInput>> {
+  return z.object({
+    author: z.string().nullish(),
+    completed: z.boolean().nullish(),
+    createdAt: z.string().nullish(),
+    date: z.string(),
+    description: z.string().nullish(),
+    shortMessage: z.string(),
+    updatedAt: z.string().nullish()
+  })
+}
+
+export function TodoCreateManyInlineInputSchema(): z.ZodObject<Properties<TodoCreateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => TodoWhereUniqueInputSchema())).nullish(),
+    create: z.array(z.lazy(() => TodoCreateInputSchema())).nullish()
+  })
+}
+
+export function TodoCreateOneInlineInputSchema(): z.ZodObject<Properties<TodoCreateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => TodoWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => TodoCreateInputSchema().nullish())
+  })
+}
+
+export function TodoManyWhereInputSchema(): z.ZodObject<Properties<TodoManyWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    author: z.string().nullish(),
+    author_contains: z.string().nullish(),
+    author_ends_with: z.string().nullish(),
+    author_in: z.array(z.string()).nullish(),
+    author_not: z.string().nullish(),
+    author_not_contains: z.string().nullish(),
+    author_not_ends_with: z.string().nullish(),
+    author_not_in: z.array(z.string()).nullish(),
+    author_not_starts_with: z.string().nullish(),
+    author_starts_with: z.string().nullish(),
+    completed: z.boolean().nullish(),
+    completed_not: z.boolean().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    date: z.string().nullish(),
+    date_gt: z.string().nullish(),
+    date_gte: z.string().nullish(),
+    date_in: z.array(z.string()).nullish(),
+    date_lt: z.string().nullish(),
+    date_lte: z.string().nullish(),
+    date_not: z.string().nullish(),
+    date_not_in: z.array(z.string()).nullish(),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    scheduledIn_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    shortMessage: z.string().nullish(),
+    shortMessage_contains: z.string().nullish(),
+    shortMessage_ends_with: z.string().nullish(),
+    shortMessage_in: z.array(z.string()).nullish(),
+    shortMessage_not: z.string().nullish(),
+    shortMessage_not_contains: z.string().nullish(),
+    shortMessage_not_ends_with: z.string().nullish(),
+    shortMessage_not_in: z.array(z.string()).nullish(),
+    shortMessage_not_starts_with: z.string().nullish(),
+    shortMessage_starts_with: z.string().nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export const TodoOrderByInputSchema = z.nativeEnum(TodoOrderByInput);
+
+export function TodoUpdateInputSchema(): z.ZodObject<Properties<TodoUpdateInput>> {
+  return z.object({
+    author: z.string().nullish(),
+    completed: z.boolean().nullish(),
+    date: z.string().nullish(),
+    description: z.string().nullish(),
+    shortMessage: z.string().nullish()
+  })
+}
+
+export function TodoUpdateManyInlineInputSchema(): z.ZodObject<Properties<TodoUpdateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => TodoConnectInputSchema())).nullish(),
+    create: z.array(z.lazy(() => TodoCreateInputSchema())).nullish(),
+    delete: z.array(z.lazy(() => TodoWhereUniqueInputSchema())).nullish(),
+    disconnect: z.array(z.lazy(() => TodoWhereUniqueInputSchema())).nullish(),
+    set: z.array(z.lazy(() => TodoWhereUniqueInputSchema())).nullish(),
+    update: z.array(z.lazy(() => TodoUpdateWithNestedWhereUniqueInputSchema())).nullish(),
+    upsert: z.array(z.lazy(() => TodoUpsertWithNestedWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function TodoUpdateManyInputSchema(): z.ZodObject<Properties<TodoUpdateManyInput>> {
+  return z.object({
+    author: z.string().nullish(),
+    completed: z.boolean().nullish(),
+    date: z.string().nullish(),
+    description: z.string().nullish(),
+    shortMessage: z.string().nullish()
+  })
+}
+
+export function TodoUpdateManyWithNestedWhereInputSchema(): z.ZodObject<Properties<TodoUpdateManyWithNestedWhereInput>> {
+  return z.object({
+    data: z.lazy(() => TodoUpdateManyInputSchema()),
+    where: z.lazy(() => TodoWhereInputSchema())
+  })
+}
+
+export function TodoUpdateOneInlineInputSchema(): z.ZodObject<Properties<TodoUpdateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => TodoWhereUniqueInputSchema().nullish()),
+    create: z.lazy(() => TodoCreateInputSchema().nullish()),
+    delete: z.boolean().nullish(),
+    disconnect: z.boolean().nullish(),
+    update: z.lazy(() => TodoUpdateWithNestedWhereUniqueInputSchema().nullish()),
+    upsert: z.lazy(() => TodoUpsertWithNestedWhereUniqueInputSchema().nullish())
+  })
+}
+
+export function TodoUpdateWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<TodoUpdateWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => TodoUpdateInputSchema()),
+    where: z.lazy(() => TodoWhereUniqueInputSchema())
+  })
+}
+
+export function TodoUpsertInputSchema(): z.ZodObject<Properties<TodoUpsertInput>> {
+  return z.object({
+    create: z.lazy(() => TodoCreateInputSchema()),
+    update: z.lazy(() => TodoUpdateInputSchema())
+  })
+}
+
+export function TodoUpsertWithNestedWhereUniqueInputSchema(): z.ZodObject<Properties<TodoUpsertWithNestedWhereUniqueInput>> {
+  return z.object({
+    data: z.lazy(() => TodoUpsertInputSchema()),
+    where: z.lazy(() => TodoWhereUniqueInputSchema())
+  })
+}
+
+export function TodoWhereInputSchema(): z.ZodObject<Properties<TodoWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => TodoWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    author: z.string().nullish(),
+    author_contains: z.string().nullish(),
+    author_ends_with: z.string().nullish(),
+    author_in: z.array(z.string()).nullish(),
+    author_not: z.string().nullish(),
+    author_not_contains: z.string().nullish(),
+    author_not_ends_with: z.string().nullish(),
+    author_not_in: z.array(z.string()).nullish(),
+    author_not_starts_with: z.string().nullish(),
+    author_starts_with: z.string().nullish(),
+    completed: z.boolean().nullish(),
+    completed_not: z.boolean().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    createdBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    date: z.string().nullish(),
+    date_gt: z.string().nullish(),
+    date_gte: z.string().nullish(),
+    date_in: z.array(z.string()).nullish(),
+    date_lt: z.string().nullish(),
+    date_lte: z.string().nullish(),
+    date_not: z.string().nullish(),
+    date_not_in: z.array(z.string()).nullish(),
+    description: z.string().nullish(),
+    description_contains: z.string().nullish(),
+    description_ends_with: z.string().nullish(),
+    description_in: z.array(z.string()).nullish(),
+    description_not: z.string().nullish(),
+    description_not_contains: z.string().nullish(),
+    description_not_ends_with: z.string().nullish(),
+    description_not_in: z.array(z.string()).nullish(),
+    description_not_starts_with: z.string().nullish(),
+    description_starts_with: z.string().nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    publishedBy: z.lazy(() => UserWhereInputSchema().nullish()),
+    scheduledIn_every: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_none: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    scheduledIn_some: z.lazy(() => ScheduledOperationWhereInputSchema().nullish()),
+    shortMessage: z.string().nullish(),
+    shortMessage_contains: z.string().nullish(),
+    shortMessage_ends_with: z.string().nullish(),
+    shortMessage_in: z.array(z.string()).nullish(),
+    shortMessage_not: z.string().nullish(),
+    shortMessage_not_contains: z.string().nullish(),
+    shortMessage_not_ends_with: z.string().nullish(),
+    shortMessage_not_in: z.array(z.string()).nullish(),
+    shortMessage_not_starts_with: z.string().nullish(),
+    shortMessage_starts_with: z.string().nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish(),
+    updatedBy: z.lazy(() => UserWhereInputSchema().nullish())
+  })
+}
+
+export function TodoWhereUniqueInputSchema(): z.ZodObject<Properties<TodoWhereUniqueInput>> {
+  return z.object({
+    id: z.string().nullish(),
+    selected: z.boolean().nullish(),
+    touched: z.boolean().nullish()
+  })
+}
+
+export function UnpublishLocaleInputSchema(): z.ZodObject<Properties<UnpublishLocaleInput>> {
+  return z.object({
+    locale: LocaleSchema,
+    stages: z.array(StageSchema)
+  })
+}
+
+export function UserConnectInputSchema(): z.ZodObject<Properties<UserConnectInput>> {
+  return z.object({
+    position: z.lazy(() => ConnectPositionInputSchema().nullish()),
+    where: z.lazy(() => UserWhereUniqueInputSchema())
+  })
+}
+
+export function UserCreateManyInlineInputSchema(): z.ZodObject<Properties<UserCreateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => UserWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function UserCreateOneInlineInputSchema(): z.ZodObject<Properties<UserCreateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => UserWhereUniqueInputSchema().nullish())
+  })
+}
+
+export const UserKindSchema = z.nativeEnum(UserKind);
+
+export function UserManyWhereInputSchema(): z.ZodObject<Properties<UserManyWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    isActive_not: z.boolean().nullish(),
+    kind: UserKindSchema.nullish(),
+    kind_in: z.array(UserKindSchema).nullish(),
+    kind_not: UserKindSchema.nullish(),
+    kind_not_in: z.array(UserKindSchema).nullish(),
+    name: z.string().nullish(),
+    name_contains: z.string().nullish(),
+    name_ends_with: z.string().nullish(),
+    name_in: z.array(z.string()).nullish(),
+    name_not: z.string().nullish(),
+    name_not_contains: z.string().nullish(),
+    name_not_ends_with: z.string().nullish(),
+    name_not_in: z.array(z.string()).nullish(),
+    name_not_starts_with: z.string().nullish(),
+    name_starts_with: z.string().nullish(),
+    picture: z.string().nullish(),
+    picture_contains: z.string().nullish(),
+    picture_ends_with: z.string().nullish(),
+    picture_in: z.array(z.string()).nullish(),
+    picture_not: z.string().nullish(),
+    picture_not_contains: z.string().nullish(),
+    picture_not_ends_with: z.string().nullish(),
+    picture_not_in: z.array(z.string()).nullish(),
+    picture_not_starts_with: z.string().nullish(),
+    picture_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish()
+  })
+}
+
+export const UserOrderByInputSchema = z.nativeEnum(UserOrderByInput);
+
+export function UserUpdateManyInlineInputSchema(): z.ZodObject<Properties<UserUpdateManyInlineInput>> {
+  return z.object({
+    connect: z.array(z.lazy(() => UserConnectInputSchema())).nullish(),
+    disconnect: z.array(z.lazy(() => UserWhereUniqueInputSchema())).nullish(),
+    set: z.array(z.lazy(() => UserWhereUniqueInputSchema())).nullish()
+  })
+}
+
+export function UserUpdateOneInlineInputSchema(): z.ZodObject<Properties<UserUpdateOneInlineInput>> {
+  return z.object({
+    connect: z.lazy(() => UserWhereUniqueInputSchema().nullish()),
+    disconnect: z.boolean().nullish()
+  })
+}
+
+export function UserWhereInputSchema(): z.ZodObject<Properties<UserWhereInput>> {
+  return z.object({
+    AND: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    NOT: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    OR: z.array(z.lazy(() => UserWhereInputSchema())).nullish(),
+    _search: z.string().nullish(),
+    createdAt: z.string().nullish(),
+    createdAt_gt: z.string().nullish(),
+    createdAt_gte: z.string().nullish(),
+    createdAt_in: z.array(z.string()).nullish(),
+    createdAt_lt: z.string().nullish(),
+    createdAt_lte: z.string().nullish(),
+    createdAt_not: z.string().nullish(),
+    createdAt_not_in: z.array(z.string()).nullish(),
+    id: z.string().nullish(),
+    id_contains: z.string().nullish(),
+    id_ends_with: z.string().nullish(),
+    id_in: z.array(z.string()).nullish(),
+    id_not: z.string().nullish(),
+    id_not_contains: z.string().nullish(),
+    id_not_ends_with: z.string().nullish(),
+    id_not_in: z.array(z.string()).nullish(),
+    id_not_starts_with: z.string().nullish(),
+    id_starts_with: z.string().nullish(),
+    isActive: z.boolean().nullish(),
+    isActive_not: z.boolean().nullish(),
+    kind: UserKindSchema.nullish(),
+    kind_in: z.array(UserKindSchema).nullish(),
+    kind_not: UserKindSchema.nullish(),
+    kind_not_in: z.array(UserKindSchema).nullish(),
+    name: z.string().nullish(),
+    name_contains: z.string().nullish(),
+    name_ends_with: z.string().nullish(),
+    name_in: z.array(z.string()).nullish(),
+    name_not: z.string().nullish(),
+    name_not_contains: z.string().nullish(),
+    name_not_ends_with: z.string().nullish(),
+    name_not_in: z.array(z.string()).nullish(),
+    name_not_starts_with: z.string().nullish(),
+    name_starts_with: z.string().nullish(),
+    picture: z.string().nullish(),
+    picture_contains: z.string().nullish(),
+    picture_ends_with: z.string().nullish(),
+    picture_in: z.array(z.string()).nullish(),
+    picture_not: z.string().nullish(),
+    picture_not_contains: z.string().nullish(),
+    picture_not_ends_with: z.string().nullish(),
+    picture_not_in: z.array(z.string()).nullish(),
+    picture_not_starts_with: z.string().nullish(),
+    picture_starts_with: z.string().nullish(),
+    publishedAt: z.string().nullish(),
+    publishedAt_gt: z.string().nullish(),
+    publishedAt_gte: z.string().nullish(),
+    publishedAt_in: z.array(z.string()).nullish(),
+    publishedAt_lt: z.string().nullish(),
+    publishedAt_lte: z.string().nullish(),
+    publishedAt_not: z.string().nullish(),
+    publishedAt_not_in: z.array(z.string()).nullish(),
+    updatedAt: z.string().nullish(),
+    updatedAt_gt: z.string().nullish(),
+    updatedAt_gte: z.string().nullish(),
+    updatedAt_in: z.array(z.string()).nullish(),
+    updatedAt_lt: z.string().nullish(),
+    updatedAt_lte: z.string().nullish(),
+    updatedAt_not: z.string().nullish(),
+    updatedAt_not_in: z.array(z.string()).nullish()
+  })
+}
+
+export function UserWhereUniqueInputSchema(): z.ZodObject<Properties<UserWhereUniqueInput>> {
+  return z.object({
+    id: z.string().nullish()
+  })
+}
+
+export function VersionWhereInputSchema(): z.ZodObject<Properties<VersionWhereInput>> {
+  return z.object({
+    id: z.string(),
+    revision: z.number(),
+    stage: StageSchema
+  })
+}
+
+export const _FilterKindSchema = z.nativeEnum(_FilterKind);
+
+export const _MutationInputFieldKindSchema = z.nativeEnum(_MutationInputFieldKind);
+
+export const _MutationKindSchema = z.nativeEnum(_MutationKind);
+
+export const _OrderDirectionSchema = z.nativeEnum(_OrderDirection);
+
+export const _RelationInputCardinalitySchema = z.nativeEnum(_RelationInputCardinality);
+
+export const _RelationInputKindSchema = z.nativeEnum(_RelationInputKind);
+
+export const _RelationKindSchema = z.nativeEnum(_RelationKind);
+
+export const _SystemDateTimeFieldVariationSchema = z.nativeEnum(_SystemDateTimeFieldVariation);

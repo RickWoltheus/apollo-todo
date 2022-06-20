@@ -11,6 +11,14 @@ generates:
       - "typescript-operations"
       - "typescript-react-apollo"
       - "fragment-matcher"
+      - "typescript-validation-schema"
+    config:
+      # strictScalars: true
+      schema: zod
+      scalarSchemas:
+        Date: z.string()
+        DateTime: z.string()
+        Email: z.string().email()
   ./graphql.schema.json:
     plugins:
       - "introspection"
