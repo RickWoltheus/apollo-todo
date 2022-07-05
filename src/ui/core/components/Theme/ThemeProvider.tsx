@@ -1,8 +1,9 @@
 
 
 import { createTheme, ThemeProvider } from '@mui/material';
+import { observer } from 'mobx-react';
 import React from 'react';
-import { useAppConfigurationQuery } from '../../../../generated/graphql';
+import { useStores } from '../../utils/mobx';
 
 const darkTheme = createTheme({
     palette: {
@@ -16,12 +17,12 @@ const darkTheme = createTheme({
     },
   });
 
-export const AppThemeProvider: React.FunctionComponent = ({ children }) => {
- const {data} = useAppConfigurationQuery()
+export const AppThemeProvider:React.FC = observer(({children}) => {
+    const { appConfiguration } = useStores()
 
-  return (
-    <ThemeProvider theme={data?.appConfig?.theme === 'dark' ? darkTheme : lightTheme}>
-        {children}
-    </ThemeProvider>
-  );
-}
+    return (
+      <ThemeProvider theme={appConfiguration.theme === 'dark' ? darkTheme : lightTheme}>
+          {children}
+      </ThemeProvider>
+    );
+})

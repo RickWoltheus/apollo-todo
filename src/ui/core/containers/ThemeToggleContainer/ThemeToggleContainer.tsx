@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { useAppConfigurationQuery } from '../../../../generated/graphql';
-import appConfigVar from '../../../../data/appConfiguration/cache/appConfiguration';
 import { ThemeToggle } from '../../components/ThemeToggle/ThemeToggle';
+import { observer } from 'mobx-react';
+import { useStores } from '../../utils/mobx';
 
 
-export const ThemeToggleContainer: React.FunctionComponent = () => {
-  const { data } = useAppConfigurationQuery()
+export const ThemeToggleContainer: React.FunctionComponent = (
+  observer(() => {
+   const { appConfiguration } = useStores()
 
-  console.log(data)
-  if(!data?.appConfig) return null
+  if(!appConfiguration) return null
 
   return (
-    <ThemeToggle toggleTheme={() => appConfigVar({...data.appConfig, theme: data.appConfig?.theme === 'light' ? 'dark' : 'light' })} />
+      <ThemeToggle toggleTheme={() => appConfiguration.setTheme( appConfiguration.theme === 'light' ? 'dark' : 'light')} />
   );
-}
+}))

@@ -15,7 +15,6 @@ const [mutate, {loading, error}] = useUpdateTodoMutation()
   return (
         <>
             <TodoForm todo={todo} loading={loading} onComplete={data => {
-                console.log(data)
               return mutate({ variables: { id: todo.id, input: data } });
           }} />
         </>

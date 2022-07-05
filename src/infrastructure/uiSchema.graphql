@@ -9,10 +9,8 @@ extend type Query {
 
 type Todo {
   selected: Boolean!
-  touched: Boolean!
 }
 
 extend type TodoWhereUniqueInput {
   selected: Boolean
-  touched: Boolean
 }
